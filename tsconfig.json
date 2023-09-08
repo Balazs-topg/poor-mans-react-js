@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "es6",
     "module": "ESNext",
     "jsx": "react",
     "allowJs": true,
@@ -8,15 +8,9 @@
     "checkJs": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "jsxFactory": "createElement"
   },
-  "include": [
-    "*.ts",
-    "*.tsx",
-    "*.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+  "exclude": ["node_modules", "dist"]
 }
