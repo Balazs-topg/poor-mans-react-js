@@ -2,40 +2,35 @@ function createElement(tag, props = {}, ...children) {
   if (typeof tag === "function") {
     return tag({ ...props, children });
   }
-  let element = { tag, props: { ...props, children } };
-  return element;
+  let VDOMNode = { tag, props: { ...props, children } };
+  return VDOMNode;
 }
 
-function render(reactElementOrStringOrNumber, container) {
-  //create real dom node
-  const realDomElement = document.createElement(
-    reactElementOrStringOrNumber.tag
-  );
+function render(VDOMNode, container) {
+  //create real dom nodee
+  const realDomElement = document.createElement(VDOMNode.tag);
 
   //renders strings and numbers
-  if (
-    typeof reactElementOrStringOrNumber === "string" ||
-    typeof reactElementOrStringOrNumber === "number"
-  ) {
-    container.appendChild(
-      document.createTextNode(String(reactElementOrStringOrNumber))
-    );
+  if (typeof VDOMNode === "string" || typeof VDOMNode === "number") {
+    container.appendChild(document.createTextNode(String(VDOMNode)));
     return;
   }
 
   //renders the elements props
-  if (reactElementOrStringOrNumber.props) {
-    Object.keys(reactElementOrStringOrNumber.props)
+  if (VDOMNode.props) {
+    Object.keys(VDOMNode.props)
       .filter((props) => props !== "children")
       .forEach((propKey) => {
-        const propValue = reactElementOrStringOrNumber.props[propKey];
+        const propValue = VDOMNode.props[propKey];
         realDomElement.setAttribute(propKey, propValue);
       });
   }
 
+  //this is where the recursion happens
   //renders the children of the current element
-  if (reactElementOrStringOrNumber.props.children) {
-    reactElementOrStringOrNumber.props.children.forEach((child) => {
+  if (VDOMNode.props.children) {
+    VDOMNode.props.children.forEach((child) => {
+      //if its an array, then render all of the elements of the array
       if (child instanceof Array) {
         child.forEach((itemInTheArray) => {
           render(itemInTheArray, realDomElement);
@@ -45,23 +40,22 @@ function render(reactElementOrStringOrNumber, container) {
       }
     });
   }
-
   container.appendChild(realDomElement);
 }
 
-function TestingJSX({ title, children = "none" }) {
+function CounterComponent({}) {
   return (
-    <div class="exempel">
-      <h1>{title}</h1>
-      <h2>{children}</h2>
-      <p>Text </p>
+    <div class="bruh" test="yyett">
+      <h1>current count is: null</h1>
+      <button>increment</button>
+      <button>decrement</button>
     </div>
   );
 }
 
 render(
-  <TestingJSX title="helloooo">
+  <CounterComponent>
     childThing <p>nested</p> <input type="text" name="" id="" />
-  </TestingJSX>,
+  </CounterComponent>,
   document.querySelector("reactContent")
 );

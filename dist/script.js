@@ -2,30 +2,31 @@ function createElement(tag, props = {}, ...children) {
     if (typeof tag === "function") {
         return tag(Object.assign(Object.assign({}, props), { children }));
     }
-    let element = { tag, props: Object.assign(Object.assign({}, props), { children }) };
-    return element;
+    let VDOMNode = { tag, props: Object.assign(Object.assign({}, props), { children }) };
+    return VDOMNode;
 }
-function render(reactElementOrStringOrNumber, container) {
-    //create real dom node
-    const realDomElement = document.createElement(reactElementOrStringOrNumber.tag);
+function render(VDOMNode, container) {
+    //create real dom nodee
+    const realDomElement = document.createElement(VDOMNode.tag);
     //renders strings and numbers
-    if (typeof reactElementOrStringOrNumber === "string" ||
-        typeof reactElementOrStringOrNumber === "number") {
-        container.appendChild(document.createTextNode(String(reactElementOrStringOrNumber)));
+    if (typeof VDOMNode === "string" || typeof VDOMNode === "number") {
+        container.appendChild(document.createTextNode(String(VDOMNode)));
         return;
     }
     //renders the elements props
-    if (reactElementOrStringOrNumber.props) {
-        Object.keys(reactElementOrStringOrNumber.props)
+    if (VDOMNode.props) {
+        Object.keys(VDOMNode.props)
             .filter((props) => props !== "children")
             .forEach((propKey) => {
-            const propValue = reactElementOrStringOrNumber.props[propKey];
+            const propValue = VDOMNode.props[propKey];
             realDomElement.setAttribute(propKey, propValue);
         });
     }
+    //this is where the recursion happens
     //renders the children of the current element
-    if (reactElementOrStringOrNumber.props.children) {
-        reactElementOrStringOrNumber.props.children.forEach((child) => {
+    if (VDOMNode.props.children) {
+        VDOMNode.props.children.forEach((child) => {
+            //if its an array, then render all of the elements of the array
             if (child instanceof Array) {
                 child.forEach((itemInTheArray) => {
                     render(itemInTheArray, realDomElement);
@@ -38,13 +39,13 @@ function render(reactElementOrStringOrNumber, container) {
     }
     container.appendChild(realDomElement);
 }
-function TestingJSX({ title, children = "none" }) {
-    return (createElement("div", { class: "exempel" },
-        createElement("h1", null, title),
-        createElement("h2", null, children),
-        createElement("p", null, "Text ")));
+function CounterComponent({}) {
+    return (createElement("div", { class: "bruh", test: "yyett" },
+        createElement("h1", null, "current count is: null"),
+        createElement("button", null, "increment"),
+        createElement("button", null, "decrement")));
 }
-render(createElement(TestingJSX, { title: "helloooo" },
+render(createElement(CounterComponent, null,
     "childThing ",
     createElement("p", null, "nested"),
     " ",
