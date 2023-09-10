@@ -1,14 +1,18 @@
-const reactContentNode = document.querySelector("reactContent");
-
-function createElement(tag, props, ...children) {
+function createElement(tag, props = {}, ...children) {
   if (typeof tag === "function") {
-    return tag(props);
+    return tag({ ...props, children });
   }
   let element = { tag, props: { ...props, children } };
   return element;
 }
 
 function render(reactElementOrStringOrNumber, container) {
+  //create real dom node
+  const realDomElement = document.createElement(
+    reactElementOrStringOrNumber.tag
+  );
+
+  //renders strings and numbers
   if (
     typeof reactElementOrStringOrNumber === "string" ||
     typeof reactElementOrStringOrNumber === "number"
@@ -19,41 +23,45 @@ function render(reactElementOrStringOrNumber, container) {
     return;
   }
 
-  const realDomElement = document.createElement(
-    reactElementOrStringOrNumber.tag
-  );
-
+  //renders the elements props
   if (reactElementOrStringOrNumber.props) {
     Object.keys(reactElementOrStringOrNumber.props)
       .filter((props) => props !== "children")
       .forEach((propKey) => {
-        console.log(propKey);
         const propValue = reactElementOrStringOrNumber.props[propKey];
         realDomElement.setAttribute(propKey, propValue);
       });
   }
 
+  //renders the children of the current element
   if (reactElementOrStringOrNumber.props.children) {
     reactElementOrStringOrNumber.props.children.forEach((child) => {
-      render(child, realDomElement);
+      if (child instanceof Array) {
+        child.forEach((itemInTheArray) => {
+          render(itemInTheArray, realDomElement);
+        });
+      } else {
+        render(child, realDomElement);
+      }
     });
   }
 
   container.appendChild(realDomElement);
 }
 
-function TestingJSX() {
+function TestingJSX({ title, children = "none" }) {
   return (
-    <div class="bruh" bruh="yeet" testing="yeet">
-      <h1>testing</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At sunt, et
-        odit magnam amet, qui quidem aut reiciendis sapiente mollitia molestiae
-        illum sint vitae, tempora veritatis rem. Quo, debitis voluptas.
-      </p>
+    <div class="exempel">
+      <h1>{title}</h1>
+      <h2>{children}</h2>
+      <p>Text </p>
     </div>
   );
 }
 
-//console.log(<TestingJSX />);
-render(<TestingJSX />, document.querySelector("reactContent"));
+render(
+  <TestingJSX title="helloooo">
+    childThing <p>nested</p> <input type="text" name="" id="" />
+  </TestingJSX>,
+  document.querySelector("reactContent")
+);
