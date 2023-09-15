@@ -7,7 +7,7 @@ function createElement(tag, props = {}, ...children) {
 }
 
 function render(VDOMNode, container) {
-  //create real dom nodee
+  //create real dom node
   const realDomElement = document.createElement(VDOMNode.tag);
 
   //renders strings and numbers
@@ -16,7 +16,7 @@ function render(VDOMNode, container) {
     return;
   }
 
-  //renders the elements props
+  //renders the nodes' props
   if (VDOMNode.props) {
     Object.keys(VDOMNode.props)
       .filter((props) => props !== "children")

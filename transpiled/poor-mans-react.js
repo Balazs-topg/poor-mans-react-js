@@ -6,14 +6,14 @@ function createElement(tag, props = {}, ...children) {
     return VDOMNode;
 }
 function render(VDOMNode, container) {
-    //create real dom nodee
+    //create real dom node
     const realDomElement = document.createElement(VDOMNode.tag);
     //renders strings and numbers
     if (typeof VDOMNode === "string" || typeof VDOMNode === "number") {
         container.appendChild(document.createTextNode(String(VDOMNode)));
         return;
     }
-    //renders the elements props
+    //renders the nodes' props
     if (VDOMNode.props) {
         Object.keys(VDOMNode.props)
             .filter((props) => props !== "children")
