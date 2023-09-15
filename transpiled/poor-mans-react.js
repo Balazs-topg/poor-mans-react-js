@@ -19,7 +19,13 @@ function render(VDOMNode, container) {
             .filter((props) => props !== "children")
             .forEach((propKey) => {
             const propValue = VDOMNode.props[propKey];
-            realDomElement.setAttribute(propKey, propValue);
+            //for "onclick" and such
+            if (propKey.startsWith("on")) {
+                realDomElement[propKey] = propValue;
+            }
+            else {
+                realDomElement.setAttribute(propKey, propValue);
+            }
         });
     }
     //this is where the recursion happens
@@ -39,14 +45,29 @@ function render(VDOMNode, container) {
     }
     container.appendChild(realDomElement);
 }
-function CounterComponent({}) {
-    return (createElement("div", { class: "bruh", test: "yyett" },
-        createElement("h1", null, "current count is: null"),
-        createElement("button", null, "increment"),
-        createElement("button", null, "decrement")));
+let stateValue;
+function useState(initialValue) {
+    if (stateValue === undefined) {
+        stateValue = initialValue;
+    }
+    const setValue = (newValue) => {
+        stateValue = newValue;
+        console.log("newValue", newValue);
+    };
+    return [stateValue, setValue];
 }
-render(createElement(CounterComponent, null,
-    "childThing ",
-    createElement("p", null, "nested"),
-    " ",
-    createElement("input", { type: "text", name: "", id: "" })), document.querySelector("reactContent"));
+function CounterComponent({}) {
+    const [count, setCount] = useState(10);
+    console.log(count);
+    return (createElement("div", { class: "bruh", test: "yyett" },
+        createElement("h1", null,
+            "current count is: ",
+            count),
+        createElement("button", { onclick: () => {
+                setCount(count + 1);
+            } }, "increment"),
+        createElement("button", { onclick: () => {
+                setCount(count - 1);
+            } }, "decrement")));
+}
+render(createElement(CounterComponent, null), document.querySelector("reactContent"));

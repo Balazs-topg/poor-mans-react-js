@@ -22,7 +22,12 @@ function render(VDOMNode, container) {
       .filter((props) => props !== "children")
       .forEach((propKey) => {
         const propValue = VDOMNode.props[propKey];
-        realDomElement.setAttribute(propKey, propValue);
+        //for "onclick" and such
+        if (propKey.startsWith("on")) {
+          realDomElement[propKey] = propValue;
+        } else {
+          realDomElement.setAttribute(propKey, propValue);
+        }
       });
   }
 
@@ -43,19 +48,46 @@ function render(VDOMNode, container) {
   container.appendChild(realDomElement);
 }
 
+let stateValue;
+
+function useState(initialValue) {
+  if (stateValue === undefined) {
+    stateValue = initialValue;
+  }
+
+  const setValue = (newValue) => {
+    stateValue = newValue;
+    console.log("newValue", newValue);
+  };
+
+  return [stateValue, setValue];
+}
+
 function CounterComponent({}) {
+  const [count, setCount] = useState(10);
+  console.log(count);
   return (
     <div class="bruh" test="yyett">
-      <h1>current count is: null</h1>
-      <button>increment</button>
-      <button>decrement</button>
+      <h1>current count is: {count}</h1>
+      <button
+        onclick={() => {
+          setCount(count + 1);
+        }}
+      >
+        increment
+      </button>
+      <button
+        onclick={() => {
+          setCount(count - 1);
+        }}
+      >
+        decrement
+      </button>
     </div>
   );
 }
 
 render(
-  <CounterComponent>
-    childThing <p>nested</p> <input type="text" name="" id="" />
-  </CounterComponent>,
+  <CounterComponent></CounterComponent>,
   document.querySelector("reactContent")
 );
