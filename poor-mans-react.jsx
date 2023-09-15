@@ -48,34 +48,35 @@ function render(VDOMNode, container) {
   container.appendChild(realDomElement);
 }
 
-let stateValue;
+let states = [];
+let stateCursor = 0;
 
 function useState(initialValue) {
-  if (stateValue === undefined) {
-    stateValue = initialValue;
+  const frozenCursor = stateCursor;
+
+  if (states[frozenCursor] === undefined) {
+    console.log("undefined g");
+    states[frozenCursor] = initialValue;
   }
 
   const setValue = (newValue) => {
-    stateValue = newValue;
-    console.log("newValue", newValue);
+    console.log(newValue);
+    states[frozenCursor] = newValue;
+    reRender();
   };
 
-  return [stateValue, setValue];
+  stateCursor++;
+
+  return [states[frozenCursor], setValue];
 }
 
 function CounterComponent({}) {
   const [count, setCount] = useState(10);
-  console.log(count);
+  const [countB, setCountB] = useState(0);
+
   return (
     <div class="bruh" test="yyett">
       <h1>current count is: {count}</h1>
-      <button
-        onclick={() => {
-          setCount(count + 1);
-        }}
-      >
-        increment
-      </button>
       <button
         onclick={() => {
           setCount(count - 1);
@@ -83,7 +84,40 @@ function CounterComponent({}) {
       >
         decrement
       </button>
+
+      <button
+        onclick={() => {
+          setCount(count + 1);
+        }}
+      >
+        increment
+      </button>
+      <h1>current count is: {countB}</h1>
+      <button
+        onclick={() => {
+          setCountB(countB - 1);
+        }}
+      >
+        decrement
+      </button>
+
+      <button
+        onclick={() => {
+          setCountB(countB + 1);
+        }}
+      >
+        increment
+      </button>
     </div>
+  );
+}
+
+function reRender() {
+  stateCursor = 0;
+  document.querySelector("reactContent").innerHTML = "";
+  render(
+    <CounterComponent></CounterComponent>,
+    document.querySelector("reactContent")
   );
 }
 

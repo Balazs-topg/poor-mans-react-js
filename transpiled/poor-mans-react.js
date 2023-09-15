@@ -45,29 +45,48 @@ function render(VDOMNode, container) {
     }
     container.appendChild(realDomElement);
 }
-let stateValue;
+let states = [];
+let stateCursor = 0;
 function useState(initialValue) {
-    if (stateValue === undefined) {
-        stateValue = initialValue;
+    const frozenCursor = stateCursor;
+    if (states[frozenCursor] === undefined) {
+        console.log("undefined g");
+        states[frozenCursor] = initialValue;
     }
     const setValue = (newValue) => {
-        stateValue = newValue;
-        console.log("newValue", newValue);
+        console.log(newValue);
+        states[frozenCursor] = newValue;
+        reRender();
     };
-    return [stateValue, setValue];
+    stateCursor++;
+    return [states[frozenCursor], setValue];
 }
 function CounterComponent({}) {
     const [count, setCount] = useState(10);
-    console.log(count);
+    const [countB, setCountB] = useState(0);
     return (createElement("div", { class: "bruh", test: "yyett" },
         createElement("h1", null,
             "current count is: ",
             count),
         createElement("button", { onclick: () => {
+                setCount(count - 1);
+            } }, "decrement"),
+        createElement("button", { onclick: () => {
                 setCount(count + 1);
             } }, "increment"),
+        createElement("h1", null,
+            "current count is: ",
+            countB),
         createElement("button", { onclick: () => {
-                setCount(count - 1);
-            } }, "decrement")));
+                setCountB(countB - 1);
+            } }, "decrement"),
+        createElement("button", { onclick: () => {
+                setCountB(countB + 1);
+            } }, "increment")));
+}
+function reRender() {
+    stateCursor = 0;
+    document.querySelector("reactContent").innerHTML = "";
+    render(createElement(CounterComponent, null), document.querySelector("reactContent"));
 }
 render(createElement(CounterComponent, null), document.querySelector("reactContent"));
