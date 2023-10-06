@@ -4,13 +4,13 @@
     "module": "ESNext",
     "jsx": "react",
     "allowJs": true,
-    "outDir": "./transpiled",
+    "outDir": "dist",
     "checkJs": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "jsxFactory": "createElement"
   },
-  "include": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+  "include": ["*.ts", "*.tsx", "*.js", "*.jsx", "src/poor-mans-react.jsx"],
   "exclude": ["node_modules", "dist"]
 }
