@@ -1,3 +1,7 @@
+//define where we want to render out app
+const entryPoint = document.querySelector("reactEntryPoint");
+
+//createElement logic
 function createElement(tag, props = {}, ...children) {
   if (typeof tag === "function") {
     return tag({ ...props, children });
@@ -6,6 +10,7 @@ function createElement(tag, props = {}, ...children) {
   return VDOMNode;
 }
 
+//rendering logic
 function render(VDOMNode, container) {
   //create real dom node
   const realDomElement = document.createElement(VDOMNode.tag);
@@ -48,19 +53,24 @@ function render(VDOMNode, container) {
   container.appendChild(realDomElement);
 }
 
+function reRender() {
+  stateCursor = 0;
+  effectsCursor = 0;
+  entryPoint.innerHTML = "";
+  render(<CounterComponent />, entryPoint);
+}
+
+//state logic
 let states = [];
 let stateCursor = 0;
-
 function useState(initialValue) {
   const frozenCursor = stateCursor;
 
   if (states[frozenCursor] === undefined) {
-    console.log("undefined g");
     states[frozenCursor] = initialValue;
   }
 
   const setValue = (newValue) => {
-    console.log(newValue);
     states[frozenCursor] = newValue;
     reRender();
   };
@@ -70,58 +80,85 @@ function useState(initialValue) {
   return [states[frozenCursor], setValue];
 }
 
-function CounterComponent({}) {
-  const [count, setCount] = useState(10);
-  const [countB, setCountB] = useState(0);
+//useEffect logic
+
+let effects = [];
+let effectsCursor = 0;
+
+function useEffect(callback, dependencies) {
+  const frozenCursor = effectsCursor;
+
+  // If there's no effect stored at the current position, initialize it
+  if (!effects[frozenCursor]) {
+    effects[frozenCursor] = {
+      dependencies: undefined,
+    };
+  }
+
+  const hasNoDependencies = !dependencies;
+  // Check if the dependencies have changed since the last render
+  const dependenciesChanged = effects[frozenCursor].dependencies
+    ? // If there were previous dependencies, compare each one to the current dependencies
+      !dependencies.every(
+        (dep, i) => dep === effects[frozenCursor].dependencies[i]
+      )
+    : // If there were no previous dependencies, consider them as changed
+      true;
+
+  // If there are no dependencies or if they have changed, run the effect callback
+  if (hasNoDependencies || dependenciesChanged) {
+    callback();
+    // Store the current dependencies for comparison in the next render
+    effects[frozenCursor].dependencies = dependencies;
+  }
+
+  // Move to the next position in the effects array for the next useEffect call
+  effectsCursor++;
+}
+
+//comonents
+function Counter() {
+  const [counterValue, setCounterValue] = useState(0);
+
+  useEffect(() => {
+    console.log("Component did mount/update");
+  }, []);
 
   return (
-    <div class="bruh" test="yyett">
-      <h1>current count is: {count}</h1>
+    <div>
+      current count is: {counterValue}
       <button
         onclick={() => {
-          setCount(count - 1);
+          setCounterValue(counterValue + 1);
         }}
       >
-        decrement
+        +
       </button>
-
       <button
         onclick={() => {
-          setCount(count + 1);
+          setCounterValue(counterValue - 1);
         }}
       >
-        increment
-      </button>
-      <h1>current count is: {countB}</h1>
-      <button
-        onclick={() => {
-          setCountB(countB - 1);
-        }}
-      >
-        decrement
-      </button>
-
-      <button
-        onclick={() => {
-          setCountB(countB + 1);
-        }}
-      >
-        increment
+        -
       </button>
     </div>
   );
 }
 
-function reRender() {
-  stateCursor = 0;
-  document.querySelector("reactContent").innerHTML = "";
-  render(
-    <CounterComponent></CounterComponent>,
-    document.querySelector("reactContent")
+function CounterComponent({}) {
+  return (
+    <div class="bruh" test="yyett">
+      <h1>Counters</h1>
+      <Counter />
+      <Counter />
+      <Counter />
+      <Counter />
+      <Counter />
+      <Counter />
+      <Counter />
+    </div>
   );
 }
 
-render(
-  <CounterComponent></CounterComponent>,
-  document.querySelector("reactContent")
-);
+//init
+render(<CounterComponent></CounterComponent>, entryPoint);

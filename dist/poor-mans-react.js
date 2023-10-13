@@ -1,3 +1,6 @@
+//define where we want to render out app
+const entryPoint = document.querySelector("reactEntryPoint");
+//createElement logic
 function createElement(tag, props = {}, ...children) {
     if (typeof tag === "function") {
         return tag(Object.assign(Object.assign({}, props), { children }));
@@ -5,6 +8,7 @@ function createElement(tag, props = {}, ...children) {
     let VDOMNode = { tag, props: Object.assign(Object.assign({}, props), { children }) };
     return VDOMNode;
 }
+//rendering logic
 function render(VDOMNode, container) {
     //create real dom node
     const realDomElement = document.createElement(VDOMNode.tag);
@@ -45,48 +49,80 @@ function render(VDOMNode, container) {
     }
     container.appendChild(realDomElement);
 }
+function reRender() {
+    stateCursor = 0;
+    effectsCursor = 0;
+    entryPoint.innerHTML = "";
+    render(createElement(CounterComponent, null), entryPoint);
+}
+//state logic
 let states = [];
 let stateCursor = 0;
 function useState(initialValue) {
     const frozenCursor = stateCursor;
     if (states[frozenCursor] === undefined) {
-        console.log("undefined g");
         states[frozenCursor] = initialValue;
     }
     const setValue = (newValue) => {
-        console.log(newValue);
         states[frozenCursor] = newValue;
         reRender();
     };
     stateCursor++;
     return [states[frozenCursor], setValue];
 }
+//useEffect logic
+let effects = [];
+let effectsCursor = 0;
+function useEffect(callback, dependencies) {
+    const frozenCursor = effectsCursor;
+    // If there's no effect stored at the current position, initialize it
+    if (!effects[frozenCursor]) {
+        effects[frozenCursor] = {
+            dependencies: undefined,
+        };
+    }
+    const hasNoDependencies = !dependencies;
+    // Check if the dependencies have changed since the last render
+    const dependenciesChanged = effects[frozenCursor].dependencies
+        ? // If there were previous dependencies, compare each one to the current dependencies
+            !dependencies.every((dep, i) => dep === effects[frozenCursor].dependencies[i])
+        : // If there were no previous dependencies, consider them as changed
+            true;
+    // If there are no dependencies or if they have changed, run the effect callback
+    if (hasNoDependencies || dependenciesChanged) {
+        callback();
+        // Store the current dependencies for comparison in the next render
+        effects[frozenCursor].dependencies = dependencies;
+    }
+    // Move to the next position in the effects array for the next useEffect call
+    effectsCursor++;
+}
+//comonents
+function Counter() {
+    const [counterValue, setCounterValue] = useState(0);
+    useEffect(() => {
+        console.log("Component did mount/update");
+    }, []);
+    return (createElement("div", null,
+        "current count is: ",
+        counterValue,
+        createElement("button", { onclick: () => {
+                setCounterValue(counterValue + 1);
+            } }, "+"),
+        createElement("button", { onclick: () => {
+                setCounterValue(counterValue - 1);
+            } }, "-")));
+}
 function CounterComponent({}) {
-    const [count, setCount] = useState(10);
-    const [countB, setCountB] = useState(0);
     return (createElement("div", { class: "bruh", test: "yyett" },
-        createElement("h1", null,
-            "current count is: ",
-            count),
-        createElement("button", { onclick: () => {
-                setCount(count - 1);
-            } }, "decrement"),
-        createElement("button", { onclick: () => {
-                setCount(count + 1);
-            } }, "increment"),
-        createElement("h1", null,
-            "current count is: ",
-            countB),
-        createElement("button", { onclick: () => {
-                setCountB(countB - 1);
-            } }, "decrement"),
-        createElement("button", { onclick: () => {
-                setCountB(countB + 1);
-            } }, "increment")));
+        createElement("h1", null, "Counters"),
+        createElement(Counter, null),
+        createElement(Counter, null),
+        createElement(Counter, null),
+        createElement(Counter, null),
+        createElement(Counter, null),
+        createElement(Counter, null),
+        createElement(Counter, null)));
 }
-function reRender() {
-    stateCursor = 0;
-    document.querySelector("reactContent").innerHTML = "";
-    render(createElement(CounterComponent, null), document.querySelector("reactContent"));
-}
-render(createElement(CounterComponent, null), document.querySelector("reactContent"));
+//init
+render(createElement(CounterComponent, null), entryPoint);
