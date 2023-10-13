@@ -57,7 +57,7 @@ function reRender() {
   stateCursor = 0;
   effectsCursor = 0;
   entryPoint.innerHTML = "";
-  render(<CounterComponent />, entryPoint);
+  render(<App />, entryPoint);
 }
 
 //state logic
@@ -145,7 +145,7 @@ function Counter() {
   );
 }
 
-function CounterComponent({}) {
+function App({}) {
   return (
     <div class="bruh" test="yyett">
       <h1>Counters</h1>
@@ -161,4 +161,4 @@ function CounterComponent({}) {
 }
 
 //init
-render(<CounterComponent></CounterComponent>, entryPoint);
+render(<App />, entryPoint);

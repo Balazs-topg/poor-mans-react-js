@@ -53,7 +53,7 @@ function reRender() {
     stateCursor = 0;
     effectsCursor = 0;
     entryPoint.innerHTML = "";
-    render(createElement(CounterComponent, null), entryPoint);
+    render(createElement(App, null), entryPoint);
 }
 //state logic
 let states = [];
@@ -113,7 +113,7 @@ function Counter() {
                 setCounterValue(counterValue - 1);
             } }, "-")));
 }
-function CounterComponent({}) {
+function App({}) {
     return (createElement("div", { class: "bruh", test: "yyett" },
         createElement("h1", null, "Counters"),
         createElement(Counter, null),
@@ -125,4 +125,4 @@ function CounterComponent({}) {
         createElement(Counter, null)));
 }
 //init
-render(createElement(CounterComponent, null), entryPoint);
+render(createElement(App, null), entryPoint);
