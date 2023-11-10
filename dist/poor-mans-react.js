@@ -98,12 +98,12 @@ function useEffect(callback, dependencies) {
     effectsCursor++;
 }
 //comonents
-function Counter() {
-    const [counterValue, setCounterValue] = useState(0);
+function Counter({ initVal, color }) {
+    const [counterValue, setCounterValue] = useState(initVal);
     useEffect(() => {
         console.log("Component did mount/update");
     }, []);
-    return (createElement("div", null,
+    return (createElement("div", { style: `color: ${color}` },
         "current count is: ",
         counterValue,
         createElement("button", { onclick: () => {
@@ -116,13 +116,13 @@ function Counter() {
 function App({}) {
     return (createElement("div", { class: "bruh", test: "yyett" },
         createElement("h1", null, "Counters"),
-        createElement(Counter, null),
-        createElement(Counter, null),
-        createElement(Counter, null),
-        createElement(Counter, null),
-        createElement(Counter, null),
-        createElement(Counter, null),
-        createElement(Counter, null)));
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 30, color: "green" }),
+        createElement(Counter, { initVal: 3, color: "red" }),
+        createElement(Counter, { initVal: 3, color: "blue" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 3, color: "black" })));
 }
 //init
 render(createElement(App, null), entryPoint);

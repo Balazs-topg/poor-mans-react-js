@@ -117,15 +117,15 @@ function useEffect(callback, dependencies) {
 }
 
 //comonents
-function Counter() {
-  const [counterValue, setCounterValue] = useState(0);
+function Counter({ initVal, color }) {
+  const [counterValue, setCounterValue] = useState(initVal);
 
   useEffect(() => {
     console.log("Component did mount/update");
   }, []);
 
   return (
-    <div>
+    <div style={`color: ${color}`}>
       current count is: {counterValue}
       <button
         onclick={() => {
@@ -149,13 +149,13 @@ function App({}) {
   return (
     <div class="bruh" test="yyett">
       <h1>Counters</h1>
-      <Counter />
-      <Counter />
-      <Counter />
-      <Counter />
-      <Counter />
-      <Counter />
-      <Counter />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={30} color={"green"} />
+      <Counter initVal={3} color={"red"} />
+      <Counter initVal={3} color={"blue"} />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={3} color={"black"} />
     </div>
   );
 }
