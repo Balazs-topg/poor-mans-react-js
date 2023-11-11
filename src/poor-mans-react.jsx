@@ -81,7 +81,6 @@ function useState(initialValue) {
 }
 
 //useEffect logic
-
 let effects = [];
 let effectsCursor = 0;
 
@@ -145,14 +144,20 @@ function Counter({ initVal, color }) {
   );
 }
 
+//App component
 function App({}) {
   return (
-    <div class="bruh" test="yyett">
+    <div>
       <h1>Counters</h1>
-      <Counter initVal={3} color={"black"} />
+      <Counter initVal={300} color={"black"} />
       <Counter initVal={30} color={"green"} />
       <Counter initVal={3} color={"red"} />
       <Counter initVal={3} color={"blue"} />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={3} color={"black"} />
+      <Counter initVal={3} color={"black"} />
       <Counter initVal={3} color={"black"} />
       <Counter initVal={3} color={"black"} />
       <Counter initVal={3} color={"black"} />

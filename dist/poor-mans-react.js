@@ -113,13 +113,19 @@ function Counter({ initVal, color }) {
                 setCounterValue(counterValue - 1);
             } }, "-")));
 }
+//App component
 function App({}) {
-    return (createElement("div", { class: "bruh", test: "yyett" },
+    return (createElement("div", null,
         createElement("h1", null, "Counters"),
-        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 300, color: "black" }),
         createElement(Counter, { initVal: 30, color: "green" }),
         createElement(Counter, { initVal: 3, color: "red" }),
         createElement(Counter, { initVal: 3, color: "blue" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
+        createElement(Counter, { initVal: 3, color: "black" }),
         createElement(Counter, { initVal: 3, color: "black" }),
         createElement(Counter, { initVal: 3, color: "black" }),
         createElement(Counter, { initVal: 3, color: "black" })));
