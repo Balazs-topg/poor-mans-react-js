@@ -20,4 +20,7 @@ Here's how to set up the transpilation process:
 
 ## Educational Purpose
 This repository is part of a school project. The codebase serves as a learning tool and a reference for those interested in the inner workings of React.js.
+This project also involved me writing a "rapport" which basically summorises what i have done and found-out. [Read it here](https://docs.google.com/document/d/1jAhyUSjy2ixFD2Cwu3xIXRi2NTb1gv5s3ZiWpg0LPe4/edit?usp=sharing) (NOTE: this is quite simplified, it's written for someone who bearly knows what a javascript is lol, also it's in Swedish)
+
+
 
