@@ -22,5 +22,7 @@ Here's how to set up the transpilation process:
 This repository is part of a school project. The codebase serves as a learning tool and a reference for those interested in the inner workings of React.js.
 This project also involved me writing a "rapport" which basically summorises what i have done and found-out. [Read it here](https://docs.google.com/document/d/1jAhyUSjy2ixFD2Cwu3xIXRi2NTb1gv5s3ZiWpg0LPe4/edit?usp=sharing) (NOTE: this is quite simplified, it's written for someone who bearly knows what a javascript is lol, also it's in Swedish)
 
+The course is called "teknik specialisering" (TEKTEK00S) [skolverket](https://www.skolverket.se/undervisning/gymnasieskolan/laroplan-program-och-amnen-i-gymnasieskolan/gymnasieprogrammen/program/gymnasieingenjor---vidareutbildning-i-form-av-ett-fjarde-tekniskt-ar;jsessionid=532015DC21C3C52A0D018832804C8BA9?url=-996270488%2Fsyllabuscw%2Fjsp%2Fsubject.htm%3FsubjectCode%3DTEK%26courseCode%3DTEKTEK00S%26lang%3D%26tos%3Dgy&sv.url=12.189c87ae1623366ff3738d9#anchor_TEKTEK00S)
+
 
 
